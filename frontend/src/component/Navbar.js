@@ -1,0 +1,77 @@
+import React, {useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import classes from "./Navbar.module.css";
+import {BsPersonCircle} from "react-icons/bs";
+
+
+const Navbar = () => {
+    const token = localStorage.getItem("shortToken");
+    const navigate = useNavigate();
+    
+    const [navtool,setNavtool] = useState(false);
+    const [name,setName] = useState("");
+
+    useEffect(()=>{
+        const cname = localStorage.getItem("name");
+        setName(cname);
+    },[]);
+
+    const handleLogOut=()=>{
+        localStorage.removeItem("shortToken");
+        localStorage.removeItem("name");
+        navigate("/");
+    }
+
+    const handleLink=()=>{
+        navigate("/mylink");
+    }
+    
+  return (
+    <nav>
+        <div className={classes.logo_nav}>
+            <header>
+                <span style={{
+                    color: "black"
+                }}
+                onClick={()=>{navigate("/")}}
+                >&#128279;</span> &nbsp;Short Link
+            </header>
+        </div>
+        <div className={classes.nav_auth_btn} >
+            { !token && 
+            <div>
+                <Link to="/register">
+                    <button>
+                        Register
+                    </button>
+                </Link>
+            </div> }
+            { !token && 
+            <div>
+                <Link to="/login">
+                    <button>
+                        Log in
+                    </button>
+                </Link>
+            </div>  }
+            
+            { token  &&
+            <div className={classes.token_arrive}>
+                <BsPersonCircle className={classes.avatar_nav} />
+                <button className={classes.name_in_nav} onClick={()=>setNavtool(()=>!navtool)}>
+                    &nbsp;{ name && name}
+                </button>
+                { navtool &&    
+                <ul className={classes.nav_list}>
+                    <li onClick={handleLink}>My links</li>
+                    <li onClick={handleLogOut}>Log out</li>
+                </ul> }
+                
+            </div> }
+        </div>
+    </nav>
+  )
+}
+
+export default Navbar

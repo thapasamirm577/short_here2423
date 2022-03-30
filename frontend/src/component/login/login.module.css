@@ -1,0 +1,70 @@
+.login_header{
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+.form_container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.form_child_container{
+    max-width: 90%;
+}
+.indv_input_container{
+    margin: 1rem auto;
+}
+.indv_input_container input {
+    height: 4rem;
+    width: 30rem;
+    max-width: 90%;
+    border: none;
+    outline: none;
+    border-radius: 0.2rem;
+    padding-left: 1rem;
+    font-size: 1.4rem;
+}
+.indv_input_container label{
+    font-size: 1.5rem;   
+}
+.indv_input_container button{
+    margin-top: 1rem;
+    width: 30rem;
+    max-width: 90%;
+    height: 3.5rem;
+    border: none;
+    outline: none;
+    border-radius: 0.3rem;
+    cursor: pointer;
+    transition: all 400ms linear;
+}
+.indv_input_container button:hover{
+    box-shadow: 0 2px 6px 0 rgba(0,0,0,0.5);
+}
+.dont_have{
+    text-align: center;
+    margin: 1rem auto 2rem auto;
+    font-size: 1.2rem;
+}
+.dont_have button{
+    cursor: pointer;
+    background-color: rgba(0,0,0,0);
+    border: none;
+    outline: none;
+}
+.validate_text{
+    color: red;
+    font-size: 1.2rem;
+    display: block;
+    max-width: 90%;
+    width: 30rem;
+}
+.validate_textC{
+    color: green;
+    font-size: 1.2rem;
+}
+.register_message{
+    text-align: center;
+    font-size: 1.5rem;
+    color: rgb(11, 138, 11);
+}
