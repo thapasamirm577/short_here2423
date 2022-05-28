@@ -17,9 +17,9 @@ export default function Router(){
             <Navbar />
             <Routes>
                 <Route path="/" element={<Home />} exact />
-                <Route path="/login" element={<Login />} exact />
-                <Route path="/register" element={<Register />} exact />
-                <Route path="/mylink" element={<Mylink />} exact />
+                <Route path="/user/login" element={<Login />} exact />
+                <Route path="/user/register" element={<Register />} exact />
+                <Route path="/user/mylink" element={<Mylink />} exact />
                 <Route path="*" element={<Eror404 />} exact />
             </Routes>
         </BrowserRouter>
