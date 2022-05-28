@@ -1,40 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import Layout from './layout'
-
+import { useDispatch, useSelector } from 'react-redux';
+import { creatingLink, creatingNoAuthLink } from '../reducer/linkAction';
 import classes from './home.module.css';
-import axios from 'axios';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { useDispatch } from 'react-redux';
-import { creatingLink } from '../reducer/linkAction';
 
 const Home = () => {
     
     const dispatch = useDispatch();
+    const data = useSelector(state=>state.link.data);
+    const authData = useSelector(state=>state.authUser.data)
     const [url,setUrl] = useState("");
     const [shortUrl,setShortUrl] = useState("");
-    const [fetch,setFetch] = useState(false);
     const [copied,setCopy] = useState(false);
     const [loading,setLoading] = useState(false);
 
-    const fetching = async()=>{
-        try {
-            setLoading(true);
-            const res = await axios(`https://api.shrtco.de/v2/shorten?url=${url}`);
-            if(res.data.result){
-                setShortUrl(res.data.result.full_short_link2);
-            }
-            setLoading(false);
-        } catch (error) {
-            //console.log(error);
-        }
-    }
-
-    useEffect(()=>{
-        if(url !== undefined && url.length){
-            fetching();
-        }
-
-    },[fetch])
+    console.log(window.location.origin);
 
     useEffect(()=>{
         const timer = setTimeout(()=>{
@@ -49,14 +30,30 @@ const Home = () => {
     }
     const handleSubmit=(e)=>{
         e.preventDefault();
-        setFetch(!fetch);
-    }
-
-    useEffect(()=>{
-        if(shortUrl){
-            dispatch(creatingLink({ originalLink: url, shortLink:shortUrl }))
+        // setFetch(!fetch);
+        if(url){
+            setLoading(true);
+            const localToken = localStorage.getItem("shortToken");
+            
+            if(localToken || authData[0]?._id){
+                dispatch(creatingLink({ originalLink: url }))
+            }else{
+               dispatch(creatingNoAuthLink({ originalLink: url}))
+            }
         }
-    },[shortUrl])
+        setLoading(false);
+    }
+        
+    useEffect(()=>{
+        if(data){
+            setShortUrl(data.shortLink);
+        }else{
+            setShortUrl("");
+        }
+    },[data])
+
+    // console.log(authData);
+    // console.log(data)
     return (
         <>
         
@@ -94,8 +91,8 @@ const Home = () => {
                             marginBottom:"10px"
                         }
                     }>Your short link</header>
-                    <p className={classes.shortlink_here}>{shortUrl}</p>
-                    <CopyToClipboard text={shortUrl} onCopy={(e)=>setCopy(true)} >
+                    <input type={'text'} className={classes.shortlink_here} value={`https://short577.herokuapp.com/${shortUrl}`} onChange={()=>{}} />
+                    <CopyToClipboard text={`${window.location.origin}/${shortUrl}`} onCopy={(e)=>setCopy(true)} >
                         <button> { copied ? "Copied": "click to copy"}</button>
                     </CopyToClipboard>
                     

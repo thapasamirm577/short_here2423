@@ -1,5 +1,6 @@
 const { createAsyncThunk } = require("@reduxjs/toolkit");
 
+
 //thunk for creating link
 export const creatingLink = createAsyncThunk(
     "cretinglinkhere",
@@ -15,7 +16,20 @@ export const creatingLink = createAsyncThunk(
         return await res.json();
     }
 )
-
+//thunk for creating link no auth
+export const creatingNoAuthLink = createAsyncThunk(
+    "cretinglinkherenoauth",
+    async(data)=>{
+        const res = await fetch("/create-no-auth",{
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data)
+        })
+        return await res.json();
+    }
+)
 //thunk for displaying link
 export const displayingLink = createAsyncThunk(
     "displaylinkhere",

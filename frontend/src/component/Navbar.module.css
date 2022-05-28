@@ -3,7 +3,8 @@ nav{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    background-color: #999;
+    background-color: #000;
+    color: white;
     font-size: 1.5rem;
 }
 .logo_nav{
@@ -27,6 +28,7 @@ nav{
 .nav_auth_btn button{
     cursor: pointer;
     background-color: rgba(0,0,0,0);
+    color: white;
     border: none;
     outline: none;
     font-size: 2rem;

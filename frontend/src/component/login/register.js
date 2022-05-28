@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom'
 import { registerUser } from '../../reducer/action';
+import { authActions } from '../../reducer/authReducer';
 
 import Layout from '../layout';
 import classes from './login.module.css';
@@ -12,6 +14,8 @@ const Register = () => {
   const dispatch = useDispatch();
   const message = useSelector(state=>state.authUser.message);
   const error = useSelector(state=>state.authUser.error);
+
+  const navigate = useNavigate();
 
   const [name,setName] = useState("");
   const [email,setEmail] = useState("");
@@ -71,7 +75,7 @@ const Register = () => {
   //confirm password
   const cpasswordKeyHandle = (e)=>{
     if(password !== e.target.value){
-      console.log(password);
+      //console.log(password);
       setInfo(prevState=>{
           return { ...prevState, cpassword: true}
         }
@@ -98,6 +102,23 @@ const Register = () => {
     
   }
 
+  useEffect(()=>{
+    if(message){
+      const timer = setTimeout(()=>{
+        dispatch(authActions.removeMessage())
+        navigate('/login')
+      },2000)
+  
+      return ()=>{ clearTimeout(timer)}
+    }
+    if(error){
+      const timer = setTimeout(()=>{
+        dispatch(authActions.removeError())
+      },2000)
+  
+      return ()=>{ clearTimeout(timer)}
+    }
+  },[message,error])
   return (
     <Layout>
       <header className={classes.login_header}>Registration</header>

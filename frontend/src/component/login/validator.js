@@ -10,7 +10,7 @@ export const validator = (name,value)=>{
         const dotpos = value.indexOf(".");
         const pos = dotpos - atpos;
         if(pos < 2){
-            console.log("Please enter valid email");
+            //console.log("Please enter valid email");
             return true;
         }
         return false

@@ -5,11 +5,17 @@ const mongoose = require("mongoose");
 const User = require("./model/authModel");
 const bycript = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const cors = require("cors");
+const dotenv = require("dotenv");
+const path = require("path");
 const Link = require("./model/linkModel");
 const PORT = process.env.PORT || 5000;
-const JWT_SECRET="faklsFHLKFfkslfFklfsf";
 
-mongoose.connect("mongodb+srv://samir:hClykNB0CkY0HSaG@cluster0.2nywx.mongodb.net/urlShortendb?retryWrites=true&w=majority",{
+dotenv.config({
+    path: "./.env",
+});
+
+mongoose.connect(process.env.MONGODB_URI,{
     useNewUrlParser: true, useUnifiedTopology: true
 })
 
@@ -24,6 +30,7 @@ mongoose.connection.on("error",(error)=>{
 
 //middleware for json parse
 app.use(express.json());
+app.use(cors());
 
 //middleware for login
 const userRequiredLogin = (req,res,next)=>{
@@ -32,7 +39,7 @@ const userRequiredLogin = (req,res,next)=>{
         return res.status(422).json({ error: "You must be logged in"});
     }
     try {
-        const { userId } = jwt.verify(authorization,JWT_SECRET);
+        const { userId } = jwt.verify(authorization,process.env.JWT_SECRET);
         requestUser = userId;
         next(); 
     } catch (error) {
@@ -46,9 +53,9 @@ app.get("/test",userRequiredLogin, (req,res)=>{
     res.status(200).json({ message: requestUser});
 })
 
-app.get("/", (req,res)=>{
-    res.json({message: "Hello this is url shorten home"})
-})
+// app.get("/", (req,res)=>{
+//     res.json({message: "Hello this is url shorten home"})
+// })
 
 
 //Registering user 
@@ -104,7 +111,7 @@ app.post("/login", async(req,res)=>{
         
         const matching = await bycript.compare(password,user.password);
         if(matching){
-            const token = jwt.sign({ userId: user._id}, JWT_SECRET);
+            const token = jwt.sign({ userId: user._id}, process.env.JWT_SECRET);
             //console.log(token)
             const data = await User.find({ email: email});
             return res.status(201).json({ message: "Sucessfully signed in", token:token, data: data});
@@ -132,21 +139,50 @@ app.get("/displayuser", userRequiredLogin, async(req,res)=>{
 
 //create link
 app.post("/create", userRequiredLogin, async(req,res)=>{
-    const { originalLink, shortLink } = req.body;
+    const { originalLink } = req.body;
 
-    if( !originalLink || !shortLink ){
+    if( !originalLink ){
+        return res.status(422).json({ error: "Link must be provided"})
+    }
+    try {
+
+        if(requestUser){
+            const data = await new Link({
+                originalLink: originalLink,
+                createdAt: new Date(),  
+                linkBy: requestUser
+            }).save();
+            return res.status(200).json({ message:"Successfully created", data: data});
+        }else{
+            const data = await new Link({
+                originalLink: originalLink,
+                createdAt: new Date()
+            }).save();
+            return res.status(200).json({ message:"Successfully created", data: data});
+        }
+        
+
+    } catch (error) {
+        console.log(error);
+        res.status(422).json({ error: "link creation problem "+error});
+    }
+
+})
+
+//create link no auth
+app.post("/create-no-auth", async(req,res)=>{
+    const { originalLink } = req.body;
+
+    if( !originalLink ){
         return res.status(422).json({ error: "Link must be provided"})
     }
     try {
         const data = await new Link({
             originalLink: originalLink,
-            shortLink: shortLink,
-            createdAt: new Date(),
-            linkBy: requestUser
+            createdAt: new Date()
         }).save();
-
         return res.status(200).json({ message:"Successfully created", data: data});
-
+        
     } catch (error) {
         console.log(error);
         res.status(422).json({ error: "link creation problem "+error});
@@ -189,6 +225,23 @@ app.delete("/delete/:id", userRequiredLogin, async(req,res)=>{
         res.status(422).json({ error: error});
     }
 })
+
+// get shorturl and redirect
+app.get('/:shortUrl', async(req,res)=>{
+    const shortUrl = await Link.findOne({ shortLink: req.params.shortUrl});
+    if(!shortUrl){
+        return res.sendStatus(404);
+    }
+    res.redirect(shortUrl.originalLink);
+})
+
+
+if(process.env.PORT === 'production'){
+    app.use(express.static("frontend/build"));
+    app.get("*", (req,res)=>{
+        res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'));
+    })
+}
 
 
 //application listening

@@ -6,6 +6,8 @@ import {BsPersonCircle} from "react-icons/bs";
 
 
 const Navbar = () => {
+
+    const data = useSelector(state=>state.authUser.data);
     const token = localStorage.getItem("shortToken");
     const navigate = useNavigate();
     
@@ -13,13 +15,20 @@ const Navbar = () => {
     const [name,setName] = useState("");
 
     useEffect(()=>{
-        const cname = localStorage.getItem("name");
-        setName(cname);
+        const cname = localStorage.getItem("shortLinkname");
+        if(cname){
+            setName(cname);
+            //console.log(cname)
+        }else{
+            setName(data[0]?.name)
+            //console.log(data);
+        }
     },[]);
 
     const handleLogOut=()=>{
         localStorage.removeItem("shortToken");
-        localStorage.removeItem("name");
+        localStorage.removeItem("shortLinkname");
+        window.location.reload()
         navigate("/");
     }
 
@@ -27,6 +36,7 @@ const Navbar = () => {
         navigate("/mylink");
     }
     
+
   return (
     <nav>
         <div className={classes.logo_nav}>

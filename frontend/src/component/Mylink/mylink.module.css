@@ -15,6 +15,7 @@
 .short_link_show{
     border-left: 0.3rem solid black;
     margin-bottom: 1rem;
+    color: black;
 }
 .original_link_show span,
 .short_link_show span{

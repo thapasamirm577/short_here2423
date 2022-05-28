@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector} from "react-redux";
 import { Link, useNavigate } from 'react-router-dom';
 import { loginUser } from '../../reducer/action';
+import { authActions } from '../../reducer/authReducer';
 import Layout from '../layout'
 import classes from './login.module.css';
 
@@ -24,12 +25,26 @@ const Login = () => {
     }
 
     dispatch(loginUser({ email, password }));
-
-    setTimeout(()=>{
-      navigate("/")
-    },10)
    
   }
+  useEffect(()=>{
+    if(message){
+      const timer = setTimeout(()=>{
+        dispatch(authActions.removeMessage())
+        navigate('/')
+      },2000)
+  
+      return ()=>{ clearTimeout(timer)}
+    }
+    if(error){
+      const timer = setTimeout(()=>{
+        dispatch(authActions.removeError())
+      },2000)
+  
+      return ()=>{ clearTimeout(timer)}
+    }
+  },[message,error])
+
   return (
     <Layout>
       <header className={classes.login_header}>Log in</header>

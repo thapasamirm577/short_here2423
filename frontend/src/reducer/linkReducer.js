@@ -1,4 +1,4 @@
-import { creatingLink, deletingLink, displayingLink } from "./linkAction";
+import { creatingLink, creatingNoAuthLink, deletingLink, displayingLink } from "./linkAction";
 
 const { createSlice } = require("@reduxjs/toolkit");
 
@@ -26,6 +26,23 @@ const linkSlice = createSlice({
         [creatingLink.pending]: (state,action)=>{
             state.loading = true
         },
+        [creatingLink.rejected]: (state,action)=>{
+            state.loading = false
+        },
+        [creatingNoAuthLink.fulfilled]: (state,action)=>{
+            state.loading = false;
+            if(action.payload.error){
+                state.error = action.payload.error;
+            }
+            state.message = action.payload.message;
+            state.data = action.payload.data;
+        },
+        [creatingNoAuthLink.pending]: (state,action)=>{
+            state.loading = true
+        },
+        [creatingNoAuthLink.rejected]: (state,action)=>{
+            state.loading = false
+        },
         [displayingLink.fulfilled]: (state,action)=>{
             state.loading = false;
             //console.log(action.payload)
@@ -38,9 +55,11 @@ const linkSlice = createSlice({
         [displayingLink.pending]: (state,action)=>{
             state.loading = true
         },
+        [displayingLink.rejected]: (state,action)=>{
+            state.loading = false
+        },
         [deletingLink.fulfilled]: (state,action)=>{
             state.loading = false;
-            console.log(action.payload)
             if(action.payload.error){
                 state.error = action.payload.error;
             }
@@ -50,6 +69,9 @@ const linkSlice = createSlice({
         },
         [deletingLink.pending]: (state,action)=>{
             state.loading = true
+        },
+        [deletingLink.rejected]: (state,action)=>{
+            state.loading = false
         }
     }
 })

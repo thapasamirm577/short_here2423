@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const shortId = require("shortid");
 const { ObjectId } = mongoose.Schema.Types;
 
 const linkSchema = mongoose.Schema({
@@ -6,9 +7,10 @@ const linkSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    shortLink: {
+    shortLink:{
         type: String,
         required: true,
+        default: shortId.generate
     },
     createdAt: Date,
     linkBy:{
