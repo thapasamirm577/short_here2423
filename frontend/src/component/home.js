@@ -15,8 +15,6 @@ const Home = () => {
     const [copied,setCopy] = useState(false);
     const [loading,setLoading] = useState(false);
 
-    console.log(window.location.origin);
-
     useEffect(()=>{
         const timer = setTimeout(()=>{
             setCopy(false);
@@ -91,7 +89,7 @@ const Home = () => {
                             marginBottom:"10px"
                         }
                     }>Your short link</header>
-                    <input type={'text'} className={classes.shortlink_here} value={`https://short577.herokuapp.com/${shortUrl}`} onChange={()=>{}} />
+                    <input type={'text'} className={classes.shortlink_here} value={`${window.location.origin}/${shortUrl}`} onChange={()=>{}} />
                     <CopyToClipboard text={`${window.location.origin}/${shortUrl}`} onCopy={(e)=>setCopy(true)} >
                         <button> { copied ? "Copied": "click to copy"}</button>
                     </CopyToClipboard>

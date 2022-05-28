@@ -16,12 +16,12 @@ const Navbar = () => {
 
     useEffect(()=>{
         const cname = localStorage.getItem("shortLinkname");
-        if(cname){
-            setName(cname);
-            //console.log(cname)
-        }else{
-            setName(data[0]?.name)
+        if(data.length > 0 || data[0]?.name){
             //console.log(data);
+            setName(data[0].name);
+        }else{
+            //console.log(cname)
+            setName(cname)
         }
     },[]);
 
