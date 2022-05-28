@@ -50,7 +50,7 @@ const authSlice = createSlice({
             state.error = action.payload.error;
             localStorage.setItem("shortToken", action.payload.token);
             state.data = action.payload.data;
-            console.log(action.payload.data)
+            //console.log(action.payload.data)
             if(action.payload.data){
                 localStorage.setItem("shortLinkname",action.payload.data[0]?.name);
             }

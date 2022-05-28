@@ -23,7 +23,7 @@ const Navbar = () => {
             //console.log(cname)
             setName(cname)
         }
-    },[]);
+    },[data]);
 
     const handleLogOut=()=>{
         localStorage.removeItem("shortToken");
