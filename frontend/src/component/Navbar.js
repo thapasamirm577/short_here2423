@@ -28,8 +28,8 @@ const Navbar = () => {
     const handleLogOut=()=>{
         localStorage.removeItem("shortToken");
         localStorage.removeItem("shortLinkname");
-        window.location.reload()
         navigate("/");
+        window.location.reload()
     }
 
     const handleLink=()=>{
