@@ -50,7 +50,9 @@ const linkSlice = createSlice({
                 state.error = action.payload.error;
             }
             state.message = action.payload.message;
-            state.data = action.payload.data;
+            if(action.payload.data){
+                state.data = action.payload.data.reverse();
+            }
         },
         [displayingLink.pending]: (state,action)=>{
             state.loading = true
