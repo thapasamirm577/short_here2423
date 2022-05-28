@@ -51,7 +51,7 @@ const Navbar = () => {
         <div className={classes.nav_auth_btn} >
             { !token && 
             <div>
-                <Link to="/register">
+                <Link to="/user/register">
                     <button>
                         Register
                     </button>
@@ -59,7 +59,7 @@ const Navbar = () => {
             </div> }
             { !token && 
             <div>
-                <Link to="/login">
+                <Link to="/user/login">
                     <button>
                         Log in
                     </button>
