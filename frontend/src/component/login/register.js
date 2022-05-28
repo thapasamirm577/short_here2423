@@ -207,7 +207,7 @@ const Register = () => {
       </form>
       <div className={classes.dont_have}>
         <p>Have an account? &nbsp;
-          <Link to="/login">
+          <Link to="/user/login">
             <button>Log in</button>
           </Link>         
         </p>

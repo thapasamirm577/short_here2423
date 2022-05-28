@@ -33,7 +33,7 @@ const Navbar = () => {
     }
 
     const handleLink=()=>{
-        navigate("/mylink");
+        navigate("/user/mylink");
     }
     
 

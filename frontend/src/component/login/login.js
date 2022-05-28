@@ -92,7 +92,7 @@ const Login = () => {
 
       <div className={classes.dont_have}>
         <p>Don't have an account? &nbsp;
-          <Link to="/register">
+          <Link to="/user/register">
             <button>Register</button>
           </Link>
           
