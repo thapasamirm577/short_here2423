@@ -1,4 +1,4 @@
-# Short Url - Url Shoretner
+# Short link - Url Shortener
 
 It is a website where you can crate short link of your link
 
